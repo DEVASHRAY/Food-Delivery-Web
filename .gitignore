@@ -1,0 +1,61 @@
+# ----------------------------
+# Node.js dependencies
+# ----------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ----------------------------
+# Environment files
+# ----------------------------
+.env
+.env.*      
+
+# ----------------------------
+# Logs
+# ----------------------------
+logs
+*.log
+*.log.*
+*.pid
+*.seed
+*.pid.lock
+
+# ----------------------------
+# Build / runtime files
+# ----------------------------
+dist/
+build/
+.cache/
+out/
+coverage/      # test coverage reports (e.g. nyc, jest)
+.tmp/
+tmp/
+*.tmp
+
+# ----------------------------
+# Uploaded files (if Express serves uploads)
+# ----------------------------
+uploads/
+*.sqlite3      # if using SQLite locally
+
+# ----------------------------
+# IDE / editor junk
+# ----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ----------------------------
+# System files
+# ----------------------------
+.DS_Store
+Thumbs.db
+
+# ----------------------------
+# Linting / Packaging
+# ----------------------------
+.eslintcache
+*.tgz
