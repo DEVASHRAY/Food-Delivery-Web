@@ -1,0 +1,28 @@
+services:
+  foodzy-dev:
+    build:
+      context: .
+      target: dev
+    container_name: foodzy-dev
+    ports:
+      - '2704:2704'
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      # Uncomment if file watching is flaky on your OS:
+      # - CHOKIDAR_USEPOLLING=1
+    volumes:
+      # Mount source for hot reload
+      - ./src:/usr/src/app/src
+      # Mount configs
+      - ./nodemon.json:/usr/src/app/nodemon.json
+      - ./tsconfig.json:/usr/src/app/tsconfig.json
+      # Keep node_modules inside container (named volume)
+      - node_modules:/usr/src/app/node_modules
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+volumes:
+  node_modules:
