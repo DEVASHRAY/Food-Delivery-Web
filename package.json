@@ -1,5 +1,25 @@
 {
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+    "name": "foodzy-backend",
+    "version": "1.0.0",
+    "main": "dist/server.js",
+    "type": "module",
+    "scripts": {
+        "dev": "nodemon",
+        "build": "rm -rf dist && tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "express": "^5.1.0",
+        "mongoose": "^8.17.2"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.23",
+        "@types/node": "^20.19.11",
+        "nodemon": "^3.1.10",
+        "pm2": "^5.4.2",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.6.3"
+    }
 }
