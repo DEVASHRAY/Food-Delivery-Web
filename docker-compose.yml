@@ -5,7 +5,7 @@ services:
       target: dev
     container_name: foodzy-dev
     ports:
-      - '2704:2704'
+      - '${PORT:-2704}:${PORT:-2704}'
     env_file:
       - .env
     environment:
