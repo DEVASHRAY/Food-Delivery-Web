@@ -1,5 +1,3 @@
-// src/lib/AppError.ts
-
 export const ErrorCodes = {
   BAD_REQUEST: 'BAD_REQUEST',
   UNAUTHORIZED: 'UNAUTHORIZED',
@@ -95,9 +93,7 @@ export class AppError extends Error {
 
   // ---------- Helpers ----------
   static fromUnknown(err: unknown): AppError {
-    if (err instanceof AppError) return err;
-    if (err instanceof Error)
-      return AppError.internal(err.message, { cause: err });
-    return AppError.internal(String(err), { cause: err });
+    // Always generic message for safety
+    return AppError.internal('Internal server error', { cause: err });
   }
 }

@@ -1,4 +1,3 @@
-// src/lib/db.ts
 import mongoose from 'mongoose';
 
 const connectMongoDB = async (): Promise<void> => {
