@@ -1,21 +1,41 @@
+// src/middleware/error-handler.ts
 import type { Request, Response, NextFunction } from 'express';
 import { AppError } from '../lib/AppError.js';
 
 export default function errorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
-  _next: NextFunction
+  next: NextFunction
 ) {
-  // Normalize to minimal 500 if it's not an AppError
+  // Normalize to AppError
   const appErr =
     err instanceof AppError
       ? err
       : AppError.internal('Internal server error', { cause: err });
 
+  // If headers are already sent, delegate to Express default handler
+  if (res.headersSent) return next(appErr);
+
   const status = appErr.httpStatus;
   const is4xx = status >= 400 && status < 500;
 
+  // Decide log severity
+  const level: 'warn' | 'error' = is4xx && status !== 429 ? 'warn' : 'error';
+
+  // eslint-disable-next-line no-console
+  console[level]('❌ Error:', {
+    method: req.method,
+    path: req.originalUrl,
+    status,
+    error: appErr.error,
+    message: appErr.message,
+    requestId: (req as any).id, // useful if request-id middleware is present
+    causeName: (appErr.cause as any)?.name,
+    causeMessage: (appErr.cause as any)?.message,
+  });
+
+  // Build safe payload
   const payload: Record<string, unknown> = {
     success: false,
     status,
@@ -23,18 +43,17 @@ export default function errorHandler(
     message: appErr.message,
   };
 
-  // Only 4xx responses may include details
+  // Only 4xx can include details
   if (is4xx && appErr.details) payload.details = appErr.details;
 
-  // Log server-side (never leak cause to client)
-  // eslint-disable-next-line no-console
-  console.error('❌ Error:', {
-    status,
-    error: appErr.error,
-    message: appErr.message,
-    causeName: (appErr.cause as any)?.name,
-    causeMessage: (appErr.cause as any)?.message,
-  });
+  // Always set headers
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'no-store');
 
-  res.status(status).json(payload);
+  // Respect HEAD semantics
+  if (req.method === 'HEAD') {
+    return res.status(status).end();
+  }
+
+  return res.status(status).json(payload);
 }
