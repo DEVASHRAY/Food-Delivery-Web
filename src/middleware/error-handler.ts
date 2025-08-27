@@ -1,6 +1,6 @@
 // src/middleware/error-handler.ts
 import type { Request, Response, NextFunction } from 'express';
-import { AppError } from '../lib/AppError.js';
+import { AppError } from '../lib/app-error.js';
 
 export default function errorHandler(
   err: unknown,

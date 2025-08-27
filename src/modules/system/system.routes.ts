@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
-import { AppError } from '../lib/AppError.js';
+import { AppError } from '../../lib/app-error.js';
 
-const router = Router();
+export const systemRouter = Router();
 
-router.get('/health', (_req, res) => {
+systemRouter.get('/health', (_req, res) => {
   res.success();
 });
 
-router.get('/ready', async (_req, res, next) => {
+systemRouter.get('/ready', async (_req, res, next) => {
   try {
     if (mongoose.connection.readyState !== 1) {
       throw AppError.serviceUnavailable('Service not ready', {
@@ -34,5 +34,3 @@ router.get('/ready', async (_req, res, next) => {
     next(err);
   }
 });
-
-export default router;
